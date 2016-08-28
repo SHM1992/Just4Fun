@@ -1,0 +1,78 @@
+// Clone.cpp : copy a complex single linklist
+
+#include "stdafx.h"
+#include <iostream>
+using namespace std;
+
+
+struct ComplexListNode
+{
+	int m_nValue;
+	ComplexListNode* m_pNext;
+	ComplexListNode* m_pSibling;
+};
+
+void CloneNodes(ComplexListNode* &pHead){
+
+	ComplexListNode* p = pHead;
+	while(p!=NULL){
+		ComplexListNode* pCloned = new ComplexListNode();
+		pCloned->m_nValue = p->m_nValue;
+		pCloned->m_pNext = p->m_pNext;
+		pCloned->m_pSibling = NULL;
+		p->m_pNext = pCloned;
+		p = pCloned->m_pNext;
+	}
+}
+
+void ConnectSiblingNodes(ComplexListNode* &pHead){
+
+	ComplexListNode* p = pHead;
+	while(p!=NULL){
+		ComplexListNode* pNext = p->m_pNext;
+		if(p->m_pSibling!=NULL)
+			pNext->m_pSibling = p->m_pSibling->m_pNext;
+		p = pNext->m_pNext;
+	}
+}
+
+ComplexListNode* ReconnectNodes(ComplexListNode* &pHead){
+
+	//official answer:
+	/*ComplexListNode* pClonedHead = NULL;
+	ComplexListNode* pCloned = NULL;
+	ComplexListNode* p = pHead;
+	if(p!=NULL){
+		pClonedHead = pClone = p->m_pNext;
+		pNode->m_pNext = pCloned->m_pNext;
+		p = p->m_pNext;
+	}
+	while(p!=NULL){
+		pCloned->m_pNext = p->m_pNext;
+		pCloned = pCloned->m_pNext;
+		p->m_pNext = pCloned->m_pNext;
+		p = p->m_pNext;
+	}
+	return pClonedHead;*/
+
+	ComplexListNode* pClonedHead = pHead->m_pNext;
+	ComplexListNode* pCloned = pClonedHead;
+	ComplexListNode* p = pHead;
+	while(p!=NULL){
+		p->m_pNext = pCloned->m_pNext;
+		p = p->m_pNext;
+		if(p==NULL)pCloned->m_pNext=NULL;
+		else pCloned->m_pNext = p->m_pNext;
+		pCloned = pCloned->m_pNext;
+	}
+	return pClonedHead;
+}
+
+ComplexListNode* Clone(ComplexListNode* &pHead){
+
+	if(pHead==NULL)return NULL;
+	CloneNodes(pHead);
+	ConnectSiblingNodes(pHead);
+	return ReconnectNodes(pHead);
+}
+

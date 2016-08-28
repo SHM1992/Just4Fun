@@ -1,0 +1,85 @@
+// isPopOrder.cpp : judge if a sequence is a pop order of a push sequence
+//
+
+#include "stdafx.h"
+#include <iostream>
+#include <string>
+#define Maxsize 5
+#define T 100
+using namespace std;
+
+typedef struct
+{
+	int top;
+	int value[Maxsize];
+}SqStack;
+
+void Push(SqStack *&S, int e){
+
+	if(S->top==Maxsize-1)
+		return;
+	else{
+		S->top++;
+		S->value[S->top]=e;
+		return;
+	}
+}
+
+void Pop(SqStack *&S){
+
+	if(S->top==-1)return;
+	S->top--;
+	return;
+}
+
+void isPopOrder(const int *a, const int *b){
+
+	if(a!=NULL && b!=NULL && Maxsize>0){
+		SqStack *S;
+		S=(SqStack *)malloc(sizeof(SqStack));
+		S->top=-1;
+		int i = 0;
+		for(int j = 0;j<Maxsize;j++){
+			if(S->top==-1){
+				while(i<Maxsize && a[i]!=b[j]){
+					Push(S,a[i]);
+					i++;
+				}
+				if(i==Maxsize){
+					cout<<"No"<<endl;
+					return;
+				}
+			}
+			else{
+				while(i<Maxsize && a[i]!=b[j]){
+					i++;
+				}
+				if(i==Maxsize){
+					if(S->value[S->top]==b[j])Pop(S);
+					else {
+						cout<<"No"<<endl;
+						return;
+					}
+				}
+			}
+		}
+		cout<<"Yes"<<endl;
+		return;
+	}
+}
+
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	int *a = new int[Maxsize];
+	int *b = new int[Maxsize];
+	int k = 1;
+	while(k<=T){
+		for(int i = 0;i<Maxsize;i++)cin>>a[i];
+		for(int i = 0;i<Maxsize;i++)cin>>b[i];
+		isPopOrder(a,b);
+		k++;
+	}
+	return 0;
+}
+

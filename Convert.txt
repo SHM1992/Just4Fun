@@ -1,0 +1,40 @@
+// Convert.cpp : convert a binary search tree into a double-linked list
+
+#include "stdafx.h"
+#include <iostream>
+using namespace std;
+
+
+struct BinaryTreeNode
+{
+	int m_nValue;
+	BinaryTreeNode* m_pLeft;
+	BinaryTreeNode* m_pRight;
+};
+
+BinaryTreeNode* Convert(BinaryTreeNode* pRoot){
+
+	BinaryTreeNode* pLastNodeInList = NULL;
+	ConvertNode(pRoot, &pLastNodeInList);
+	BinaryTreeNode* pHead = pLastNodeInList;
+	while(pHead!=NULL && pHead->m_pLeft!=NULL)
+		pHead = pHead->m_pLeft;
+	return pHead;
+}
+
+//using a pointer to point at the pointer of last node rather than directly using the pointer of last node is because
+//recursion needs to change the location which the last pointer points without changing the pointer of last location
+//Certainly, directly using the pointer is also ok
+void ConvertNode(BinaryTreeNode* &pRoot, BinaryTreeNode** pLastNodeInList){
+
+	if(pRoot==NULL)return;
+	BinaryTreeNode* pCurrent = pRoot;
+	if(pCurrent->m_pLeft!=NULL)
+		ConvertNode(pCurrent->m_pLeft,pLastNodeInList);
+	pCurrent->m_pLeft = *pLastNodeInList;
+	if(*pLastNodeInList!=NULL)
+		(*pLastNodeInList)->m_pRight = pCurrent;
+	*pLastNodeInList = pCurrent;
+	if(pCurrent->m_pRight!=NULL)
+		ConvertNode(pCurrent->m_pRight,pLastNodeInList);
+}

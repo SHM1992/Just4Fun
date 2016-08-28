@@ -1,0 +1,78 @@
+// FindMinK.cpp : find K minimal numbers among n numbers
+
+#include "stdafx.h"
+#include <iostream>
+#define MaxSize 10
+using namespace std;
+
+void sift(int* &numbers, int start, int end){
+
+	if(numbers == NULL || start>=end)
+		return;
+	int temp = numbers[start];
+	int i = 2*start+1;
+	while(i<=end){
+		if(i<end && numbers[i]<numbers[i+1]){
+			i++;
+		}
+		else {
+			if(numbers[i]>temp){
+				numbers[start] = numbers[i];
+				start = i;
+				i = 2*start+1;
+				numbers[start] = 0;
+			}
+			else break;
+		}
+	}
+	numbers[start] = temp;
+}
+
+void HeapSort(int* &numbers, int n){
+	
+	if(numbers == NULL || n<=0)
+		return;
+	int temp;
+	for(int i = (n-1)/2;i>=0;i--){
+		sift(numbers, i,n-1);
+	}
+}
+
+void FindMinK(int* numbers, int n, int k){
+
+	if(numbers == NULL || n<=0 || k<=0 || n<k){
+		cout<<"Invalid input!"<<endl;
+		return;
+	}
+
+	int *maxHeap = new int[k];
+	for(int i=0;i<k;i++)maxHeap[i] = numbers[i];
+	HeapSort(maxHeap,k);
+
+	for(int i=k;i<n;i++){
+		if(numbers[i]>=maxHeap[0])continue;
+		else {
+			maxHeap[0] = numbers[i];
+			HeapSort(maxHeap,k);
+		}
+	}
+	for(int i=k-1;i>=0;i--){
+		cout<<maxHeap[i];
+		if(i>0)cout<<" ";
+	}
+}
+
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	while(true){
+		int *numbers = new int[MaxSize];
+		for(int i=0;i<MaxSize;i++)cin>>numbers[i];
+		int k;
+		cin>>k;
+
+		FindMinK(numbers,MaxSize,k);
+	}
+	return 0;
+}
+

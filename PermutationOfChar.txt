@@ -1,0 +1,51 @@
+// PermutationOfChar.cpp : permutation of characters in a string
+
+#include "stdafx.h"
+#include <iostream>
+#include <string>
+using namespace std;
+
+void PermutationRecursively(char* str, char* strBegin){
+
+	if(*strBegin=='\0'){
+		printf("%s\n",str);
+	}
+	else{
+		for(char* p = strBegin;*p!='\0';p++){
+			//exchange
+			char c = *p;
+			*p = *strBegin;
+			*strBegin = c;
+
+			//recursion
+			PermutationRecursively(str,strBegin+1);
+
+			//restore
+			c = *p;
+			*p = *strBegin;
+			*strBegin = c;
+		}
+	}
+}
+
+void Permutation(string s){
+
+	int len = s.length();
+	if(len==0)return;
+	char *ch = new char;
+	strcpy(ch,s.c_str());
+	
+	PermutationRecursively(ch,ch);
+}
+
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	while(true){
+		string s;
+		getline(cin, s);
+		Permutation(s);
+	}
+	return 0;
+}
+

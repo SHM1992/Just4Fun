@@ -1,0 +1,62 @@
+// InversePairs.cpp : output the number of inverse pairs
+#include "stdafx.h"
+#include <iostream>
+#include <string>
+#define MaxSize 4
+using namespace std;
+
+
+int InversePairsCore(int* numbers, int* copy, int start, int end){
+
+	if(start==end){
+		copy[start] = numbers[start];
+		return 0;
+	}
+	int length = (end-start)/2;
+	int left = InversePairsCore(copy,numbers,start,start+length);
+	int right = InversePairsCore(copy,numbers,start+length+1,end);
+
+	int i = start + length;
+	int j = end;
+	int indexCopy = end;
+	int count = 0;
+	while(i>=start && j>=start+length+1){
+		if(numbers[i]>numbers[j]){
+			copy[indexCopy--] = numbers[i--];
+			count += j-start-length;
+		}
+		else{
+			copy[indexCopy--] = numbers[j--];
+		}
+	}
+	for(;i>=start;i--){
+		copy[indexCopy--] = numbers[i];
+	}
+	for(;j>=start+length+1;j--){
+		copy[indexCopy--] = numbers[j];
+	}
+	return left+right+count;
+}
+
+int InversePairs(int* numbers, int length){
+	
+	if(numbers==NULL || length<=0)
+		return 0;
+	int *copy = new int[length];
+	for(int i =0;i<length;i++)
+		copy[i] = numbers[i];
+	int count = InversePairsCore(numbers,copy,0,length-1);
+	delete[] copy;
+	return count;
+}
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	while(true){
+		int *numbers = new int[MaxSize];
+		for(int i = 0;i<MaxSize;i++)cin>>numbers[i];
+		cout<<"The number of inverse pairs is "<<InversePairs(numbers,MaxSize)<<endl;
+	}
+	return 0;
+}
+

@@ -1,0 +1,57 @@
+// ClockwisePrintMatrix.cpp : 
+//
+
+#include "stdafx.h"
+#include <iostream>
+#include <math.h>
+using namespace std;
+
+void ClockwisePrintMatrix(int **a, int m, int n){
+	
+	if(a==NULL || m<=0 || n<=0)return;
+	int i_min = 0,i_max = m-1,j_min = 0,j_max = n-1;
+	while(i_min<=i_max || j_min<=j_max){
+		//从左到右
+		for(int j = j_min;j<=j_max;j++)
+			cout<<a[i_min][j]<<" ";
+		i_min++;
+
+		//从上到下
+		if(i_min>i_max)return;
+		for(int i = i_min;i<=i_max;i++)
+			cout<<a[i][j_max]<<" ";
+		j_max--;
+
+		//从右到左
+		if(j_min>j_max)return;
+		for(int j = j_max;j>=j_min;j--)
+			cout<<a[i_max][j]<<" ";
+		i_max--;
+
+		//从下到上
+		if(i_min>i_max)return;
+		for(int i = i_max;i>=i_min;i--)
+			cout<<a[i][j_min]<<" ";
+		j_min++;
+	}
+}
+
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	int m,n;
+	while(cin>>m>>n){
+		if(m<=0||n<=0)
+			cout<<"Invalid parameters!"<<endl;
+		int **a = new int*[m];
+		for(int i = 0;i<m;i++){
+			a[i] = new int[n];
+			for(int j = 0;j<n;j++){
+				cin>>a[i][j];
+			}
+		}		
+		fflush(stdin);
+		ClockwisePrintMatrix(a,m,n);
+	}
+	return 0;
+}

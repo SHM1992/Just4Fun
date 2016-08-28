@@ -1,0 +1,58 @@
+// PrintNumbers.cpp : print all 0~the maximal n-digit number¡£
+//
+
+#include "stdafx.h"
+#include <iostream>
+using namespace std;
+
+void PrintNumberRecursively(char *&number, int length, int index);
+void PrintNumber(char *number);
+
+void Permutation(int n){
+	
+	char *number = new char[n+1];
+	number[n] = '\0';
+
+	PrintNumberRecursively(number,n,0);
+	delete[] number;
+	return;
+
+}
+
+void PrintNumberRecursively(char *&number, int length, int index){
+	if(index==length){
+		PrintNumber(number);
+		return;
+	}
+	for(int i = 0;i<=9;i++){
+		number[index] = i + '0';
+		PrintNumberRecursively(number,length,index+1);
+		cout<<endl;
+	}
+	return;
+}
+
+void PrintNumber(char *number){
+	int i = 0;
+	while(number[i]!='\0' && number[i]=='0')i++;
+	if(number[i]=='\0')cout<<'0';
+	else {
+		for(int j = i;number[j]!='\0';j++){
+			cout<<number[j];
+		}
+	}
+	return;
+}
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	int n;
+	while(cin>>n){
+		if(n<=0){
+			cout<<"invalid parameters"<<endl;
+			continue;
+		}
+		Permutation(n);
+	}
+	return 0;
+}

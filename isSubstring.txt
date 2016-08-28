@@ -1,0 +1,54 @@
+/ isSubstring.cpp : judge if string t is the substring of string s(substring is defined a series of sub characters)
+//
+
+#include "stdafx.h"
+#include <iostream>
+#include <string>
+using namespace std;
+
+void isSubstring(string s, string t){
+
+	if(s.empty()){
+		if(t.empty())cout<<"Yes"<<endl;
+		else cout<<"No"<<endl;
+		return;
+	}
+	else {
+		if(t.empty()){
+			cout<<"Yes"<<endl;
+			return;
+		}
+		else{
+			if(t.length()>s.length()){
+				cout<<"No"<<endl;
+				return;
+			}
+			else {
+				char *ss = new char(s.length()+1);
+				char *tt = new char(t.length()+1);
+				strcpy(ss,s.c_str());
+				strcpy(tt,t.c_str());
+				int j = 0;
+				for(int i = 0;i<t.length();i++){
+					while(j<s.length() && ss[j]!=tt[i])j++;
+					if(j==s.length() || s.length()-j<t.length()-i){
+						cout<<"No"<<endl;
+						return;
+					}
+				}
+				cout<<"Yes"<<endl;
+				return;
+			}
+		}
+	}
+}
+
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	string s,t;
+	while(getline(cin,s)&&getline(cin,t)){
+		isSubstring(s,t);	
+	}
+	return 0;
+}

@@ -1,0 +1,53 @@
+// VerifySequenceOfBST.cpp : judge if a sequence is a post order of a BST
+//
+
+#include "stdafx.h"
+#include <iostream>
+#include <string>
+using namespace std;
+
+
+bool VerifySequenceOfBST(int sequence[], int length){
+	
+	if(sequence==NULL || length<=1)return true;
+	int i=0;
+	while(i<length-1){
+		if(sequence[i]==sequence[length-1])return false;
+		if(sequence[i]>sequence[length-1])break;
+		i++;
+	}
+	int j = i;
+	while(j<length-1){
+		if(sequence[j]<=sequence[length-1])return false;
+		j++;
+	}
+	return VerifySequenceOfBST(sequence,i)&&VerifySequenceOfBST(sequence+i,length-i-1);
+}
+
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	while(true){
+		string s;
+		char *ch = new char;
+		getline(cin,s);
+		strcpy(ch,s.c_str());
+		int *seq = new int;
+		int k = 0;
+		for(int i = 0;i<s.length();i++){
+			if(ch[i]>'9'||ch[i]<'0')break;
+			int j=i,x=0;
+			while(ch[j]!=' '){
+				if(ch[j]=='\0')break;
+				x = x*10+ch[j]-'0';
+				j++;
+			}
+			seq[k++] = x;
+			i = j;
+		}
+		bool b = VerifySequenceOfBST(seq,k);
+		cout<<b<<endl;
+	}
+	return 0;
+}
+

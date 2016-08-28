@@ -1,0 +1,50 @@
+// NumberOf1Between1andN.cpp : count the number of 1 appearing in the numbers among 1 and integer n
+
+#include "stdafx.h"
+#include <iostream>
+#include <math.h>
+using namespace std;
+
+int NumberOf1(const char* str){
+	if(str == NULL || *str < '0' || *str > '9' || *str == '\0')
+		return 0;
+	int first = *str - '0';
+	int length = strlen(str);
+	if(length==1 && first==0)
+		return 0;
+	if(length==1 && first>0)
+		return 1;
+
+	//compute number of 1 among 1~str[0] * pow(10.0,length-1)
+	//compute number of 1 for the first digit
+	int numFirstDigit = 0;
+	if(first>1)
+		numFirstDigit = pow(10.0,length-1);
+	if(first==1)
+		numFirstDigit = atoi(str+1)+1;
+	//compute number of 1 for the rest digits
+	int numOtherDigits = first * (length-1)*pow(10.0,length-2);
+
+	//compute number of 1 among pow(10.0,length-1)~n
+	int numRecursive = NumberOf1(str+1);
+
+	return numFirstDigit + numOtherDigits + numRecursive;
+}
+
+int NumberOf1Between1andN(int n){
+
+	if(n<=0)return 0;
+	char str[50];
+	sprintf(str,"%d",n);//format string into char array (the return value is the length of str)
+
+	return NumberOf1(str);
+}
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	long long n;
+	while(cin>>n){
+		cout<<"the number of 1 between 1 and "<<n<<" is: "<<NumberOf1Between1andN(n)<<endl;
+	}
+	return 0;
+}

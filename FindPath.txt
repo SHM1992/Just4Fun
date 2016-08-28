@@ -1,0 +1,92 @@
+// FindPath.cpp : find a path from a BT where the sum of values in each node is equal to a target
+//
+
+#include "stdafx.h"
+#include <iostream>
+#include <string>
+#include <vector>
+using namespace std;
+
+
+struct BinaryTreeNode
+{
+	int m_nValue;
+	BinaryTreeNode* m_nLeft;
+	BinaryTreeNode* m_nRight;
+};
+
+void FindPathRecursively(BinaryTreeNode* pRoot, int expectedSum, vector<int> &path, int currentSum);
+
+void CreateBinaryTree(BinaryTreeNode* &bt, int sequence[], int length){
+
+	if(length>0){
+		bt = new BinaryTreeNode;
+		int mid = length/2;
+		bt->m_nValue = sequence[mid];
+		bt->m_nLeft = bt->m_nRight = NULL;
+		CreateBinaryTree(bt->m_nLeft, sequence, mid);
+		CreateBinaryTree(bt->m_nRight, sequence+mid+1, length-mid-1);
+	}
+	else{
+		bt = NULL;
+	}	
+}
+
+void FindPath(BinaryTreeNode* pRoot, int expectedSum){
+	
+	if(pRoot == NULL)return;
+	vector<int> path;
+	int currentSum = 0;
+	FindPathRecursively(pRoot, expectedSum, path, currentSum);
+}
+
+void FindPathRecursively(BinaryTreeNode* pRoot, int expectedSum, vector<int> &path, int currentSum){
+
+	currentSum += pRoot->m_nValue;
+	path.push_back(pRoot->m_nValue);
+	if(currentSum == expectedSum || (pRoot->m_nLeft ==NULL && pRoot->m_nRight==NULL)){
+		printf("A path is found:");
+		vector<int>::iterator iter;
+		for(iter = path.begin();iter!=path.end();iter++){
+			printf("%d->",*iter);
+		}
+		printf("%d\n",*iter);
+	}
+	if(pRoot->m_nLeft!=NULL)
+		FindPathRecursively(pRoot->m_nLeft, expectedSum, path, currentSum);
+	if(pRoot->m_nRight!=NULL)
+		FindPathRecursively(pRoot->m_nRight, expectedSum, path, currentSum);
+	currentSum -= pRoot->m_nValue;
+	path.pop_back();
+}
+
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	while(true){
+		string s;
+		char *ch = new char;
+		getline(cin,s);
+		int target;
+		cin>>target;
+		strcpy(ch,s.c_str());
+		int *seq = new int;
+		int k = 0;
+		for(int i = 0;i<s.length();i++){
+			if(ch[i]>'9'||ch[i]<'0')break;
+			int j=i,x=0;
+			while(ch[j]!=' '){
+				if(ch[j]=='\0')break;
+				x = x*10+ch[j]-'0';
+				j++;
+			}
+			seq[k++] = x;
+			i = j;
+		}
+		BinaryTreeNode* bt;
+		CreateBinaryTree(bt,seq,k);
+		FindPath(bt, target);
+	}
+	return 0;
+}
+

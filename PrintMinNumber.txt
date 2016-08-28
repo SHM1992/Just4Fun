@@ -1,0 +1,50 @@
+// PrintMinNumber.cpp : print the min linked number in integer array
+
+#include "stdafx.h"
+#include <iostream>
+#include <string>
+#define MaxSize 10
+#define MaxLength 10
+using namespace std;
+
+int compare(const void* strNumbers1, const void* strNumbers2){
+	
+	char* g_StrCombine1 = new char[MaxLength*2+1];
+	char* g_StrCombine2 = new char[MaxLength*2+1];
+
+	strcpy(g_StrCombine1,*(const char**)strNumbers1);
+	strcat(g_StrCombine1,*(const char**)strNumbers2);
+	strcpy(g_StrCombine2,*(const char**)strNumbers2);
+	strcat(g_StrCombine2,*(const char**)strNumbers1);
+
+	return strcmp(g_StrCombine1,g_StrCombine2);
+}
+
+void PrintMinNumber(int *numbers, int length){
+
+	if(numbers == NULL || length<=0)
+		return;
+	char **strNumbers = new char*[length];
+	for(int i = 0;i<length;i++){
+		strNumbers[i] = new char[MaxLength+1];
+		sprintf(strNumbers[i],"%d",numbers[i]);
+	}
+	qsort(strNumbers,length,sizeof(char*),compare);//qsort can be used to sort a integer sequence by DIY rules
+	for(int i = 0;i<length;i++)
+		printf("%s",strNumbers[i]);
+	printf("\n");
+
+	for(int i = 0;i<length;i++)
+		delete[] strNumbers[i];
+	delete[] strNumbers;
+}
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	while(true){
+		int *numbers = new int[MaxSize];
+		for(int i=0;i<MaxSize;i++)cin>>numbers[i];
+		PrintMinNumber(numbers,MaxSize);
+	}
+	return 0;
+}

@@ -1,0 +1,39 @@
+// FindGreatestSumOfSubArray.cpp : find the maximal sum of subarray
+
+#include "stdafx.h"
+#include <iostream>
+#include <limits.h>
+#define MaxSize 8
+using namespace std;
+
+
+
+int FindGreatestSumOfSubArray(int* numbers,int length){
+
+	if(numbers==NULL || length<=0){
+		cout<<"Invalid input"<<endl;
+		return 0;
+	}
+	int CurrentSum = 0;
+	int GreatestSum = 0x80000000;
+	for(int i = 0;i<MaxSize;i++){
+		if(CurrentSum<=0)
+			CurrentSum = numbers[i];
+		else 
+			CurrentSum = CurrentSum + numbers[i];
+		if(CurrentSum>GreatestSum)
+			GreatestSum = CurrentSum;
+	}
+	return GreatestSum;
+}
+
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	while(true){
+		int *numbers = new int[MaxSize];
+		for(int i = 0;i<MaxSize;i++)cin>>numbers[i];
+		cout<<"The greatest sum is: "<<FindGreatestSumOfSubArray(numbers, MaxSize)<<endl;
+	}
+	return 0;
+}

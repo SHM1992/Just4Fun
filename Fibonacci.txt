@@ -1,0 +1,38 @@
+// Fibonacci.cpp : compute Fibonacci array¡£
+//
+
+#include "stdafx.h"
+#include <iostream>
+using namespace std;
+
+//Fibonacci(non-recursive)
+int Fibonacci(int n){
+	
+
+	int results[] = {0,1};
+	if(n<=2)
+		return results[n-1];
+	long long f;
+	long long f1 = results[0];
+	long long f2 = results[1];
+	for(unsigned int i=3;i<=n;i++){
+		f = f1+f2;
+		f1 = f2;
+		f2 = f;
+	}
+	return f;
+}
+
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+	int n;
+	while(cin>>n){
+		if(n<=0){
+			cout<<"invalid parameters"<<endl;
+			continue;
+		}
+		cout<<Fibonacci(n)<<endl;
+	}
+	return 0;
+}
